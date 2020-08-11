@@ -42,7 +42,7 @@ public class VerifyPasswordResetRequestAction extends AbstractAction {
             return error();
         }
 
-        val tst = this.centralAuthenticationService.getTicket(transientTicket, TransientSessionTicket.class);
+        val tst = getTicket(transientTicket);
         if (tst == null) {
             LOGGER.error("Unable to locate token [{}] in the ticket registry", transientTicket);
             return error();
@@ -77,5 +77,19 @@ public class VerifyPasswordResetRequestAction extends AbstractAction {
             return success();
         }
         return new EventFactorySupport().event(this, "questionsDisabled");
+    }
+
+    private TransientSessionTicket getTicket(final String transientTicket) {
+        try {
+            return this.centralAuthenticationService.getTicket(transientTicket, TransientSessionTicket.class);
+        } catch(final InvalidTicketException e) {
+            if (log.isDebugEnabled()) {
+                log.error(e.getMessage(), e);
+            } else {
+                log.error(e.getMessage());
+            }
+        }
+
+        return null;
     }
 }
