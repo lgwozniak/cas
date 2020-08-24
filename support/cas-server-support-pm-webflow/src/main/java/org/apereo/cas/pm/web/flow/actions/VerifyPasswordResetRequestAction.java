@@ -83,7 +83,7 @@ public class VerifyPasswordResetRequestAction extends AbstractAction {
         try {
             return this.centralAuthenticationService.getTicket(transientTicket, TransientSessionTicket.class);
         } catch(final InvalidTicketException e) {
-            if (log.isDebugEnabled()) {
+            if (LOGGER.isDebugEnabled()) {
                 LOGGER.error(e.getMessage(), e);
             } else {
                 LOGGER.error(e.getMessage());
